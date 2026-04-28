@@ -25,7 +25,7 @@ const userSchema = new Schema(
  },
  //options not fields
  {
-  timestamps : true
+  timestamps : true    //will give 1)createdAt  2)upupdatedAt
  }
 )
 
