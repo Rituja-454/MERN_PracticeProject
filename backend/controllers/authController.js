@@ -1,9 +1,9 @@
-const User = require ("./models/User");
+const User = require ("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 function JWTtokenGeneration(user){
-   jwt.sign(
+  return jwt.sign(
      {
       id:user._id,
       role:user.role
@@ -20,9 +20,9 @@ async function registerUser (req,res){
   const {name,email,password}= req.body;
   try{
       if(!name || !email || !password){
-    return res.json({message:"All fields must be required"})
-    console.log ("all fields must be required");
-    alert ("all fields required");
+    return res.status(400).json({message:"All fields must be required"})
+   // console.log ("all fields must be required");
+ 
   }
   
   const existingUser = await User.findOne({email});
@@ -64,33 +64,33 @@ const loginUser = async(req,res) =>{
   try{
       const user=req.body;
       if(!user.email || !user.password){
-        return res.json({message:"must be filled required information"})
+        return res.status(400).json({message:"must be filled required information"})
       }
 
-      const user =await User.findOne({email:user.email});   // complete user data will load in "user"
-      if(!user){
-        return res.json({message:"user not found"});
+      const users =await User.findOne({email:user.email});   // complete user data will load in "user"
+      if(!users){
+        return res.status(404).json({message:"user not found"});
       }
 
-      const pwMatch =await bcrypt.compare(user.password , password)
+      const pwMatch =await bcrypt.compare(user.password , users.password)
       if(!pwMatch){
-        return res.json({message:"invalid password"})
+        return res.status(400).json({message:"invalid password"})
       }
 
       res.json({message:"user login successfully",
         user:{
-          id:user._id,
-          name:user.name,
-          email:user.email,
-          role:user.role
+          id:users._id,
+          name:users.name,
+          email:users.email,
+          role:users.role
         },
-        token:JWTtokenGeneration(user)
+        token:JWTtokenGeneration(users)
       }
       )
   }
   catch(error){
      console.log(error);
-     res.json({message:"server error"});
+     res.status(500).json({message:"server error"});
   }
 }
 

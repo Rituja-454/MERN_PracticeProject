@@ -10,7 +10,7 @@ const cors = require("cors");
 app.use(cors());
 
 const authRoute = require("./routes/authRoutes");
-app.use("./api/auth", authRoute);
+app.use("/api/auth", authRoute);
 
 const ticketRoutes =require("./routes/ticketRoutes");
 app.use("/api/tickets",ticketRoutes)

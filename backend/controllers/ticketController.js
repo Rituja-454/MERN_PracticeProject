@@ -1,4 +1,4 @@
-const Ticket = require("./models/Ticket.js");
+const Ticket = require("../models/Ticket.js");
 
 const createTicket =async (req,res)=>{
    try{
@@ -9,24 +9,24 @@ const createTicket =async (req,res)=>{
       }
 
       const user = req.user;
-      const ticket = Ticket.create({
+      const ticket =await Ticket.create({
         title,
         description ,
-        category :category.toLowercase(),
+        category :category.toLowerCase(),
         status:"pending",
         createdBy:user.id
       });
 
-      res.json({message:"ticket created successfully " ,
+      res.json({message:"ticket created successfully " , ticket
 
 
-        ticket:{
-          id:ticket._id,
-          title:ticket.title,
-          description :ticket.description ,
-          category :ticket.category,
-          status:ticket.status
-        }
+        // ticket:{
+        //   id:ticket._id,
+        //   title:ticket.title,
+        //   description :ticket.description ,
+        //   category :ticket.category,
+        //   status:ticket.status
+        // }
       })
    }
    catch(error){
