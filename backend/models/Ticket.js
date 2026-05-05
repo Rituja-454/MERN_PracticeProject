@@ -27,7 +27,7 @@ const ticketSchema= new Schema({
 
   },
 
-  comment:[{
+  comments:[{
     comment:{
       type:String,
       required:true
