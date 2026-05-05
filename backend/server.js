@@ -12,6 +12,9 @@ app.use(cors());
 const authRoute = require("./routes/authRoutes");
 app.use("./api/auth", authRoute);
 
+const ticketRoutes =require("./routes/ticketRoutes");
+app.use("/api/tickets",ticketRoutes)
+
 app.listen(PORT ,(req,res)=>{
   console.log(`server start on PORT ${PORT}`);
 })
