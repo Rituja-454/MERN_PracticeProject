@@ -6,7 +6,8 @@ import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import CreateTicket from "./pages/createTicket";
 import Navbar from "./components/Navbar";
-import API from "./services/api";
+//import API from "./services/api";
+import TicketDetails from "./pages/ticketDetails";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/createTicket" element={<CreateTicket/>}/>
+            <Route path="/ticketDetails/:id" element={<TicketDetails/>}/>
         </Routes>
    </BrowserRouter>
   );

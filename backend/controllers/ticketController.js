@@ -17,7 +17,7 @@ const createTicket =async (req,res)=>{
         createdBy:user.id
       });
 
-      res.json({message:"ticket created successfully " , ticket
+      res.json({message:"ticket created successfully " , ticket })
 
 
         // ticket:{
@@ -27,7 +27,7 @@ const createTicket =async (req,res)=>{
         //   category :ticket.category,
         //   status:ticket.status
         // }
-      })
+      
    }
    catch(error){
      console.log(error);
