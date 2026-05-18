@@ -1,13 +1,15 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import API from "../services/api";
+import {useNavigate} from "react-router-dom";
 
 function Register(){
-
+  const navigate = useNavigate();
   const [form ,setForm] = useState({
     name:"Rituja",
     email:"ritu@gmail.com",
-    password:"ritu123"
+    password:"ritu123",
+    role:""
   });
 
   const handleChange = (e)=>{
@@ -21,6 +23,8 @@ function Register(){
       
        alert("user register successfully");
        console.log(res.data);
+
+       navigate("/login");
 
     }
     catch(error){
@@ -72,6 +76,15 @@ function Register(){
                     placeholder="enter password"/>
           </label>
         </div>
+        <label htmlFor="roleDetails">
+              <select value={form.role}
+                      name = "role"
+                      id="roleDetails"
+                      onChange={handleChange}>
+                  <option value="admin">Admin</option>
+                  <option value="employee">Employee</option>
+              </select>
+        </label>
         <p>
           Already have an account?
           <Link to="/login">Login</Link>

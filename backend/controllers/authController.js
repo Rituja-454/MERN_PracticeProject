@@ -17,7 +17,7 @@ function JWTtokenGeneration(user){
 }
 
 async function registerUser (req,res){
-  const {name,email,password}= req.body;
+  const {name,email,password,role}= req.body;
   try{
       if(!name || !email || !password){
     return res.status(400).json({message:"All fields must be required"})
@@ -39,7 +39,7 @@ async function registerUser (req,res){
     name,
     email,
     password:hashedPW ,
-    role:"employee"
+    role: role || "employee"
   });
 
   res.status(201).json(

@@ -35,6 +35,22 @@ function Dashboard(){
       navigate("/login");
   }
 
+  const updateTicketStatus=async( id ,status)=>{
+    try{
+        const res = await API.put(`api/tickets/${id}/status`, {status});
+
+        console.log(res.data);
+
+        const editTicket = tickets.map((ticket)=>(
+            ticket._id===id ? {...ticket , status} : ticket 
+        ))
+        setTickets(editTicket);
+    }
+    catch (error){
+        console.log(error.response?.data || error.message);
+    }
+  }
+
   return(
     <div>
 
@@ -63,10 +79,45 @@ function Dashboard(){
           tickets.length===0? (<p>No tickets Found</p>) : 
           (tickets.map((ticket)=>(
               <div key={ticket._id}>
+
                 <h2>Title - {ticket.title}</h2>
                 <p>Description - {ticket.description}</p>
                 <p>Category - {ticket.category}</p>
-                <p>Status - {ticket.status}</p>
+
+                {user.role ==="employee" && (
+                     <p>Status - {ticket.status}</p>
+                )}
+
+                {user.role ==="admin" && (
+                  <div>
+                    <p>Created By : {ticket.createdBy?.name}</p>
+                    <p>Email : {ticket.createdBy?.email}</p>
+
+                    <label>
+                        Update Status:
+                    </label>
+
+                    <select value={ticket.status} onChange = {(e)=>(
+                      updateTicketStatus(ticket._id , e.target.value)
+                    )}>
+                      <option value="pending">
+                          Pending
+                      </option>
+                       <option value="in progress">
+                          In progress
+                      </option>
+                       <option value="resolved">
+                          Resolved
+                      </option>
+                    </select>
+
+
+                </div>
+
+                  
+                  
+                )}
+               
 
                 <button onClick={()=>navigate(`/ticketDetails/${ticket._id}`)}>View Details </button>
             </div>

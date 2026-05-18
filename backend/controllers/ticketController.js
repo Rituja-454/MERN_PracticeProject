@@ -39,7 +39,7 @@ const getTickets =async(req,res)=>{
     try{
        let tickets;
        if(req.user.role ==="admin"){
-          tickets = await Ticket.find().populate("createdBy " , "name" ,"email").sort({createdAt:-1});
+          tickets = await Ticket.find().populate("createdBy" , "name email role" ).sort({createdAt:-1});
        }
        else{
         tickets = await Ticket.find({createdBy:req.user.id}).populate("createdBy" ,"name email").sort({createdAt:-1});
