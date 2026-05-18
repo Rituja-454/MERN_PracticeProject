@@ -135,10 +135,10 @@ const deleteTicket = async (req,res)=>{
         if(!ticket){
           return res.json({message:"ticket not found"});
         }
-        if(req.user.role !=="admin" && ticket.createdBy._id.toString()!==res.user.id.toString()){
-          return res.json({message:"access denied , employee can delete on their own tickets"})
+        if(req.user.role !=="admin" && ticket.createdBy._id.toString()!==req.user.id.toString()){
+          return res.json({message:"access denied , employee can delete only their own tickets"})
         }
-        await ticket.remove();
+        await ticket.deleteOne();
         res.json({message:"ticket deleted successfully"})
    }
    catch(error){

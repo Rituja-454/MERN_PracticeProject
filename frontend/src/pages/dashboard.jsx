@@ -51,6 +51,23 @@ function Dashboard(){
     }
   }
 
+  const deleteTicket =async (id)=>{
+    try{
+        const res =await API.delete(`api/tickets/${id}`);
+
+        console.log(res.data);
+
+        setTickets(tickets.filter((ticket) => ticket._id!==id));
+
+        alert("ticket deleted successfully");
+   }
+    catch(error){
+        console.log(error.response?.data || error.message );
+
+        alert(error.response?.data?.message || "deletion failed");
+    }
+  }
+
   return(
     <div>
 
@@ -119,7 +136,18 @@ function Dashboard(){
                 )}
                
 
-                <button onClick={()=>navigate(`/ticketDetails/${ticket._id}`)}>View Details </button>
+                <button onClick={()=>navigate(`/ticketDetails/${ticket._id}`)}>View Details
+                 </button>
+
+                 <button onClick={()=>{
+                  const confirmDelete =  window.confirm("are u sure to delete it");
+                  if(confirmDelete){
+                    deleteTicket(ticket._id);
+                  }
+
+                 }}>
+                      Delete Ticket
+                </button>
             </div>
 
            
