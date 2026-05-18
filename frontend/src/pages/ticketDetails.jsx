@@ -5,7 +5,7 @@ import API from "../services/api";
 function TicketDetails(){
   const navigate= useNavigate();
   const {id} = useParams();
-  
+  const[comment ,setComment]= useState("");
   const[ticket , setTicket] = useState(null);
 
   useEffect (()=>{
@@ -24,6 +24,23 @@ function TicketDetails(){
 
   if(!ticket){
    return <h2>Loading...</h2>;
+  }
+
+  const addComment=async()=>{
+    try{
+         const res = await API.post(`api/tickets/${id}/comment`,{comment:comment});
+        
+          console.log(res.data.ticket.comments);
+          setTicket(res.data.ticket);
+          setComment("");
+
+    }
+   catch(error){
+    console.log(error.response?.data || error.message);
+
+   }
+
+
   }
 
   return (
@@ -65,6 +82,49 @@ function TicketDetails(){
       </div>
 
       <br />
+
+      <textarea value={comment}
+                onChange={(e)=>setComment(e.target.value)}
+                placeholder="add comment"
+      />
+
+      <button onClick={addComment}>add Comment</button>
+      <br/>
+
+      <br />
+<br />
+
+    <h2>Comments</h2>
+
+    {
+      ticket.comments?.length === 0 ? (
+
+          <p>No comments added yet</p>
+
+      ) : (
+
+          ticket.comments.map((item,index)=>(
+
+            <div key={index}>
+
+                <p>
+
+                  <b>
+                      {item.createdBy?.name}
+                  </b>
+
+                  {" : "}
+
+                  {item.comment}
+
+                </p>
+
+            </div>
+          ))
+      )
+    }
+
+<br/>
 
       <button onClick={() => navigate("/dashboard")}>
         Back to Dashboard

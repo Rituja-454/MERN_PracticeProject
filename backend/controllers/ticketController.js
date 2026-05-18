@@ -56,6 +56,7 @@ const getTickets =async(req,res)=>{
 const getSingleTicket = async(req,res)=>{
    try{
       const ticket =await Ticket.findById(req.params.id).populate("createdBy","name email")
+                    .populate("comments.createdBy", "name email")
 
       if(!ticket){
         return res.json({message : "ticket not found"})
@@ -110,6 +111,13 @@ const addComment = async(req,res)=>{
           if(!ticket){
             res.json({message:"ticket not found"});
           }
+          console.log(req.body);
+          if(!req.body.comment){
+
+            return res.json({
+               message:"comment is required"
+            });
+         }
 
           ticket.comments.push({
              comment :req.body.comment ,
