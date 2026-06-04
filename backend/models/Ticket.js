@@ -12,7 +12,7 @@ const ticketSchema= new Schema({
   },
   category:{
       type:String,
-      enum:["hadware","software","hr","finance","general"],
+      enum:["hardware","software","hr","finance","general","network"],
       required:true
   },
   status:{

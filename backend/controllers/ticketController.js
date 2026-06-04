@@ -1,4 +1,4 @@
-const Ticket = require("./models/Ticket.js");
+const Ticket = require("../models/Ticket.js");
 
 const createTicket =async (req,res)=>{
    try{
@@ -9,25 +9,25 @@ const createTicket =async (req,res)=>{
       }
 
       const user = req.user;
-      const ticket = Ticket.create({
+      const ticket =await Ticket.create({
         title,
         description ,
-        category :category.toLowercase(),
+        category :category.toLowerCase(),
         status:"pending",
         createdBy:user.id
       });
 
-      res.json({message:"ticket created successfully " ,
+      res.json({message:"ticket created successfully " , ticket })
 
 
-        ticket:{
-          id:ticket._id,
-          title:ticket.title,
-          description :ticket.description ,
-          category :ticket.category,
-          status:ticket.status
-        }
-      })
+        // ticket:{
+        //   id:ticket._id,
+        //   title:ticket.title,
+        //   description :ticket.description ,
+        //   category :ticket.category,
+        //   status:ticket.status
+        // }
+      
    }
    catch(error){
      console.log(error);
@@ -39,7 +39,7 @@ const getTickets =async(req,res)=>{
     try{
        let tickets;
        if(req.user.role ==="admin"){
-          tickets = await Ticket.find().populate("createdBy " , "name" ,"email").sort({createdAt:-1});
+          tickets = await Ticket.find().populate("createdBy" , "name email role" ).sort({createdAt:-1});
        }
        else{
         tickets = await Ticket.find({createdBy:req.user.id}).populate("createdBy" ,"name email").sort({createdAt:-1});
@@ -56,6 +56,7 @@ const getTickets =async(req,res)=>{
 const getSingleTicket = async(req,res)=>{
    try{
       const ticket =await Ticket.findById(req.params.id).populate("createdBy","name email")
+                    .populate("comments.createdBy", "name email")
 
       if(!ticket){
         return res.json({message : "ticket not found"})
@@ -110,6 +111,13 @@ const addComment = async(req,res)=>{
           if(!ticket){
             res.json({message:"ticket not found"});
           }
+          console.log(req.body);
+          if(!req.body.comment){
+
+            return res.json({
+               message:"comment is required"
+            });
+         }
 
           ticket.comments.push({
              comment :req.body.comment ,
@@ -135,10 +143,10 @@ const deleteTicket = async (req,res)=>{
         if(!ticket){
           return res.json({message:"ticket not found"});
         }
-        if(req.user.role !=="admin" && ticket.createdBy._id.toString()!==res.user.id.toString()){
-          return res.json({message:"access denied , employee can delete on their own tickets"})
+        if(req.user.role !=="admin" && ticket.createdBy._id.toString()!==req.user.id.toString()){
+          return res.json({message:"access denied , employee can delete only their own tickets"})
         }
-        await ticket.remove();
+        await ticket.deleteOne();
         res.json({message:"ticket deleted successfully"})
    }
    catch(error){

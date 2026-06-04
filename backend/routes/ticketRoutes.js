@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {createTicket , getTickets , getSingleTicket , updateStatus , addComment , deleteTicket}= 
 require ("../controllers/ticketController");
-const {protect} = require("./Middleware/authMiddleware");
+const {protect} = require("../Middleware/authMiddleware");
 
 router.post("/",protect,createTicket);
 router.get("/",protect, getTickets);

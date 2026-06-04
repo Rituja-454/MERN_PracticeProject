@@ -20,7 +20,7 @@ const userSchema = new Schema(
   role:{
       type:String,
       enum:["admin" ,"employee"],
-      default:"employee"
+    // default:"employee"
   },
  },
  //options not fields
